@@ -1,3 +1,13 @@
-import React from "react";
-import { auth, provider } from "../../firebaseConfig";
-import { signInWithPopup } from "firebase/auth";
+import FormLogin from "../components/FormLogin";
+import { AuthProvider } from "./Auth";
+
+function Login(){
+    return(
+        <div className="frameLogin">
+            <AuthProvider>
+                <FormLogin />
+            </AuthProvider>
+        </div>
+    );
+}
+export default Login;
