@@ -1,0 +1,48 @@
+.hero {
+  position: relative;
+  height: 60vh;
+}
+
+@media screen and (orientation: landscape) {
+  .hero {
+    height: 60vw;
+  }
+}
+
+.carrousel::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(
+    to top,
+    rgba(32, 32, 32, 0.25),
+    rgba(0, 0, 0, 0)
+  );
+}
+
+.carrousel img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 1000ms ease-in-out;
+}
+
+.carrousel .left {
+  transform: translateX(-100%);
+}
+
+.carrousel .current {
+  transform: translateX(0);
+}
+
+.carrousel .right {
+  transform: translateX(+100%);
+  transition: none;
+}
