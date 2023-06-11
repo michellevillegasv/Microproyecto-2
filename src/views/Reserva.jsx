@@ -15,7 +15,6 @@ function Reservar() {
 
   return (
     <div>
-      <h1>Reservas</h1>
       <ReservasFormulario />
     </div>
   );
