@@ -1,42 +1,63 @@
-import {useState} from "react";
-import { useAuth } from "../views/Auth";
+import { useState } from "react";
+import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebaseConfig";
 
+function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+ 
 
+  function handleEmailLogin(event) {
+    event.preventDefault();
 
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
 
-function FormLogin(){
-    const authUse= useAuth();
-    const[emailRegister, setEmailRegister]=useState("")
-    const[passwordRegister, setPasswordRegister]=useState("")
-    const handleRegister=(e)=>{
-        e.preventDefault()
-        authUse.register(emailRegister,passwordRegister)
-    };
-    const handleGoogle=(e)=>{
-        e.preventDefault();
-        authUse.loginWithGoogle();
-    };
-    function handleClick(){
-        window.location.href="http://localhost:5173/sign-up";
-    }
-    return(
-        <div className="Login ">
-            <form className="loginForm">
-                <h3 className="title">Login</h3>
-                <input 
-                    onChange={(e)=> setEmailRegister(e.target.value)} 
-                    className="input"
-                    type="email"
-                />
-                <input onChange={(e)=>setPasswordRegister(e.target.value)}
-                className="input"
-                type="password"
-                />     
-                <button onClick={(e)=>handleRegister(e)} className="button">Enter</button>
-                <button onClick={(e)=>handleGoogle(e)} className="button">Enter with Google</button>
-                <h5 onClick={handleClick}>¿No tienes una cuenta? Regístrate</h5>
-            </form>
-        </div>
-    );
+        const user = userCredential.user;
+        console.log("Usuario inició sesión correctamente:", user.uid);
+      })
+      .catch((error) => {
+        console.error("Error al iniciar sesión con correo electrónico y contraseña:", error.message);
+      });
+  }
+
+  function handleGoogleLogin(event) {
+    event.preventDefault();
+
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
+        console.log("Usuario inició sesión correctamente:", user.uid);
+      })
+      .catch((error) => {
+        console.error("Error al iniciar sesión con cuenta de Google:", error.message);
+      });
+  }
+
+  return (
+    <div>
+      <h2>Login</h2>
+      <form onSubmit={handleEmailLogin}>
+        <label htmlFor="email">Correo electrónico:</label>
+        <input
+          type="email"
+          id="email"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+        />
+        <label htmlFor="password">Contraseña:</label>
+        <input
+          type="password"
+          id="password"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+        />
+        <button type="submit">Iniciar sesión</button>
+      </form>
+      <button onClick={handleGoogleLogin}>Iniciar sesión con Google</button>
+    </div>
+  );
 }
-export default FormLogin;
+
+export default Login
