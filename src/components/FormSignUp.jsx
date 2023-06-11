@@ -2,17 +2,16 @@ import { useState } from "react";
 import { auth, db } from "../firebaseConfig";
 import { addDoc, collection } from "firebase/firestore";
 import { GoogleAuthProvider, createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
- 
+import { useNavigate } from "react-router-dom";
 
 function Registro() {
-
-   
+    const navigate = useNavigate();
     const [name, setName] = useState("");
     const [LastName, setLastName] = useState("");
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
+ 
 
 
 
@@ -30,16 +29,19 @@ function Registro() {
         LastName: LastName,
         username: username,
         email: email,
+        favorites:[]
         };
         addDoc(collection(db, "users"), newUser)
         .then(() => {
             console.log("Datos de registro guardados en Firestore");
+            navigate(-1);
         })
         .catch((error) => {
             console.error("Error al guardar datos de registro en Firestore:", error);
         });
     })
     .catch((error) => {
+        alert(error.message);
         console.error("Error al registrar usuario:", error.message);
     });
     }
@@ -57,16 +59,19 @@ function Registro() {
               LastName: LastName,
               username: username,
               email: user.email,
+              favorites:[]
             };
             addDoc(collection(db, "usuarios"), userGoogle)
               .then(() => {
                 console.log("Datos de registro guardados en Firestore");
+                navigate(-1);
               })
               .catch((error) => {
                 console.error("Error al guardar datos de registro en Firestore:", error);
               });
           })
           .catch((error) => {
+            alert(error.message);
             console.error("Error al iniciar sesión con cuenta de Google:", error.message);
           });
     }

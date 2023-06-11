@@ -10,6 +10,11 @@ function ReservationForm() {
   const [email,setEmail] =useState("");
   const [tickets,setTickets]=useState(1);
   const [seat, setSeat]=useState(1);
+  const minPrice = 1000;
+  const maxPrice = 5000;
+  const priceRange = maxPrice - minPrice;
+  const randomPrice = Math.random();
+  const finalPrice = Math.floor(randomPrice * priceRange) + minPrice;
 
 
   const handleSubmit = (event) => {
@@ -32,7 +37,8 @@ function ReservationForm() {
         id,
         email,
         tickets,
-        seat
+        seat,
+        price:finalPrice
       })
         .then(() => {
           console.log("Reserva guardada con éxito");
@@ -66,6 +72,9 @@ function ReservationForm() {
       <label>
         Cantidad de boletos:
         <input type="number" id="tickets" value={tickets} min={1} max={5} step={1} onChange={event => setTickets(event.target.value)} />
+      </label>
+      <label>
+        Precio: {finalPrice}
       </label>
       <button type="submit">Reservar</button>
     </form>

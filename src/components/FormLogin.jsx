@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebaseConfig";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
- 
+  const navigate = useNavigate();
 
   function handleEmailLogin(event) {
     event.preventDefault();
@@ -29,8 +30,10 @@ function Login() {
       .then((result) => {
         const user = result.user;
         console.log("Usuario inició sesión correctamente:", user.uid);
+        navigate(-1);
       })
       .catch((error) => {
+        alert(error.message);
         console.error("Error al iniciar sesión con cuenta de Google:", error.message);
       });
   }
