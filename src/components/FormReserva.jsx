@@ -1,59 +1,75 @@
+import { useState, useEffect } from "react";
+import { collection, addDoc } from "firebase/firestore";
+import { auth, db } from "../firebaseConfig";
 
-import { useState } from 'react';
-import { db, reservationsCollection} from '../firebaseConfig';
+
+function ReservationForm() {
+  const [name, setName] = useState("");
+  const [lastname, setLastName] = useState("");
+  const [id, setID] = useState("");
+  const [email,setEmail] =useState("");
+  const [tickets,setTickets]=useState(1);
+  const [seat, setSeat]=useState(1);
 
 
-function ReservasFormulario() {
-  const [nombre, setNombre] = useState('');
-  const [apellido, setApellido] = useState('');
-  const [cedula, setCedula] = useState('');
-  const [correo, setCorreo] = useState('');
-  const [boletos, setBoletos] = useState(1);
-
-  function handleSubmit(event) {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    reservationsCollection.add({
-      nombre: nombre,
-      apellido: apellido,
-      cedula: cedula,
-      correo:correo,
-      boletos:boletos
-    })
-    .then(function(docRef) {
-      console.log('Reserva realizada con éxito');
-    })
-    .catch(function(error) {
-      console.error('Error al hacer la reserva:', error);
-    });
 
-    setNombre('');
-    setApellido('');
-    setCedula(''),
-    setCorreo(''),
-    setBoletos('') 
-  }
+    const user = auth.currentUser;
+
+   
+    
+    if (user) {
+
+      const reservationsRef = collection(db, "reservations");
+
+      const userRef = collection(db, "users").doc(user.uid);
+
+      addDoc(reservationsRef, {
+        userRef,
+        name,
+        lastname,
+        id,
+        email,
+        tickets,
+        seat
+      })
+        .then(() => {
+          console.log("Reserva guardada con éxito");
+        })
+        .catch((error) => {
+          console.error("Error al guardar la reserva:", error);
+        });
+    } else {
+      console.log("Usuario no autenticado");
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit}>
-
-      <label htmlFor="nombre">Nombre:</label>
-      <input type="text" id="nombre" value={nombre} onChange={event => setNombre(event.target.value)} />
-
-      <label htmlFor="apellido">Apellido:</label>
-      <input type="text" id="apellido" value={apellido} onChange={event => setApellido(event.target.value)} />
-
-      <label htmlFor="cedula">Cédula:</label>
-      <input type="number" id="cedula" value={cedula} onChange={event => setCedula(event.target.value)} />
-
-      <label htmlFor="correo">Correo:</label>
-      <input type="text" id="correo" value={correo} onChange={event => setCorreo(event.target.value)} />
-
-      <label htmlFor="boletos">Número de boletos:</label>
-      <input type="number" id="boletos" value={boletos} min={1} max={5} step={1} onChange={event => setBoletos(event.target.value)} />
-
-      <button type="submit">Hacer reserva</button>
+      <label>
+        Nombre:
+        <input type="name" value={name} onChange={(e) => setName(e.target.value)} />
+      </label>
+      <label>
+        Apellido:
+        <input type="lastName" value={lastname} onChange={(e) => setLastName(e.target.value)} />
+      </label>
+      <label>
+        Cédula:
+        <input type="id" value={id} onChange={(e) => setID(e.target.value)} />
+      </label>
+      <label>
+        Email:
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+      </label>
+      <label>
+        Cantidad de boletos:
+        <input type="number" id="tickets" value={tickets} min={1} max={5} step={1} onChange={event => setTickets(event.target.value)} />
+      </label>
+      <button type="submit">Reservar</button>
     </form>
   );
 }
 
-export default ReservasFormulario;
+export default ReservationForm;

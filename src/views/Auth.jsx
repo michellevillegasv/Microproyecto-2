@@ -27,7 +27,8 @@ export function AuthProvider({children}){
               console.log("no hay usuario suscrito");
               setUser("");
             } else {
-              setUser(currentUser);
+              setUser(
+                currentUser);
             }
           });
           return () => subscribed();
