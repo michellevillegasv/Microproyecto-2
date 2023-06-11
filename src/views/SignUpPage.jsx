@@ -1,13 +1,13 @@
-import FormLogin from "../components/FormLogin";
+import FormSignUp from "../components/FormSignUp";
 import { AuthProvider } from "./Auth";
 
-function Login(){
+function SignUp(){
     return(
         <div>
             <AuthProvider>
-                <FormLogin />
+                <FormSignUp />
             </AuthProvider>
         </div>
     )
 }
-export default Login;
+export default SignUp;
