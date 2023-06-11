@@ -1,5 +1,5 @@
 import  {useEffect, useState} from "react";
-import { auth} from "../../firebaseConfig";
+import { auth} from "../firebaseConfig";
 import {createContext, useContext } from "react";
 import {
     createUserWithEmailAndPassword,
@@ -27,7 +27,8 @@ export function AuthProvider({children}){
               console.log("no hay usuario suscrito");
               setUser("");
             } else {
-              setUser(currentUser);
+              setUser(
+                currentUser);
             }
           });
           return () => subscribed();
@@ -65,3 +66,4 @@ export function AuthProvider({children}){
         </authContext.Provider>
     );
 }
+      

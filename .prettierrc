@@ -1,6 +1,7 @@
 {
   "plugins": [
     "prettier-plugin-organize-imports",
-    "prettier-plugin-rational-order"
+    "prettier-plugin-rational-order",
+    "prettier-plugin-jsdoc"
   ]
 }

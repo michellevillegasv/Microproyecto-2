@@ -1,18 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Hero.module.css";
 
-export default function Hero() {
-  const images = useMemo(
-    () => [
-      "https://www.unimet.edu.ve/wp-content/uploads/2021/03/MODULO-DE-AULAS-ahora-1030x687.jpg",
-      "https://www.unimet.edu.ve/wp-content/uploads/2020/10/Campus-galer%C3%ADa-52.jpg",
-      "https://www.unimet.edu.ve/wp-content/uploads/2020/10/Campus-galer%C3%ADa.jpg",
-      "https://www.unimet.edu.ve/wp-content/uploads/2020/10/Campus-galer%C3%ADa-30.jpg",
-      "https://www.unimet.edu.ve/wp-content/uploads/2020/10/Campus-galer%C3%ADa-50.jpg",
-    ],
-    []
-  );
+/** @typedef {{ images: string[] }} HeroProps */
 
+/** @param {HeroProps} props */
+export default function Hero({ images }) {
   const [currentImage, setCurrentImage] = useState(0);
 
   useEffect(() => {
