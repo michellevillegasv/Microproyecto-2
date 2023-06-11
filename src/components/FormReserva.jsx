@@ -1,5 +1,7 @@
+
 import { useState } from 'react';
-import { reservationsCollection } from '../../firebaseConfig';
+import { db, reservationsCollection} from '../firebaseConfig';
+
 
 function ReservasFormulario() {
   const [nombre, setNombre] = useState('');
@@ -33,7 +35,7 @@ function ReservasFormulario() {
 
   return (
     <form onSubmit={handleSubmit}>
-        nombre y apellido, cédula de identidad, correo electrónico y cantidad de boletos 
+
       <label htmlFor="nombre">Nombre:</label>
       <input type="text" id="nombre" value={nombre} onChange={event => setNombre(event.target.value)} />
 
@@ -47,7 +49,7 @@ function ReservasFormulario() {
       <input type="text" id="correo" value={correo} onChange={event => setCorreo(event.target.value)} />
 
       <label htmlFor="boletos">Número de boletos:</label>
-      <input type="number" id="boletos" value={boletos} min={1} max={10} step={1} onChange={event => setBoletos(event.target.value)} />
+      <input type="number" id="boletos" value={boletos} min={1} max={5} step={1} onChange={event => setBoletos(event.target.value)} />
 
       <button type="submit">Hacer reserva</button>
     </form>
