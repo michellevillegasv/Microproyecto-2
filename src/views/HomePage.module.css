@@ -1,0 +1,29 @@
+.movies {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.movies > h2 {
+  margin: 1rem;
+  font-size: 2rem;
+}
+
+.movies > div {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+  justify-items: center;
+}
+
+@media (max-width: 600px) {
+  .movies > div {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .movies > div {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+}
