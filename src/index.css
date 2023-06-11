@@ -1,7 +1,8 @@
 :root {
   --primary-blue: #000830;
-  --primary-contrast: #e0e0ff;
+  --primary-contrast: #f0f0ff;
   --highlight-blue: #001060;
+  --placeholder-color: #8080a0;
 
   color: var(--primary-blue);
   font-size: 16px;
