@@ -28,6 +28,7 @@
 }
 
 .card:not(:hover, :focus, :focus-within) .content {
+  z-index: -1;
   visibility: hidden;
   opacity: 0;
 }
