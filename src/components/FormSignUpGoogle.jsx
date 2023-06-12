@@ -2,18 +2,21 @@ import {
     GoogleAuthProvider,
     signInWithPopup
   } from "firebase/auth";
-  import { addDoc, collection } from "firebase/firestore";
+  import { addDoc, collection, doc, setDoc } from "firebase/firestore";
   import { useState } from "react";
   import Button from "../components/Button";
   import TextField from "../components/TextField";
   import ArrowRightIcon from "../components/icons/ArrowRightIcon";
   import { auth, db } from "../firebaseConfig";
   import styles from "./FormSignUp.module.css";
+  import { useNavigate } from "react-router-dom";
+  
   
   export default function FormSignUp() {
     const [name, setName] = useState("");
     const [LastName, setLastName] = useState("");
     const [username, setUsername] = useState("");
+    const navigate=useNavigate();
   
     function handleRegistroGoogle() {
       const provider = new GoogleAuthProvider();
@@ -27,11 +30,16 @@ import {
             LastName: LastName,
             username: username,
             email: user.email,
+            favorites: []
           };
           addDoc(collection(db, "users"), userGoogle)
+            .then((docRef) => {
+              const userDocRef = doc(db, "users", docRef.id);
+              return setDoc(userDocRef, { uid: auth.currentUser.uid }, { merge: true });
+            })
             .then(() => {
               console.log("Datos de registro guardados en Firestore");
-              window.location.href = "http://localhost:5173/";
+              navigate("/");
             })
             .catch((error) => {
               console.error(
@@ -41,6 +49,7 @@ import {
             });
         })
         .catch((error) => {
+          alert(error.message)
           console.error(
             "Error al iniciar sesión con cuenta de Google:",
             error.message
@@ -49,7 +58,7 @@ import {
     }
 
     function handleLoginGo(){
-      window.location.href = "http://localhost:5173/login";
+      navigate("/login");
     }
   
     return (

@@ -1,13 +1,14 @@
 import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import Button from "../components/Button";
 import TextField from "../components/TextField";
 import ArrowRightIcon from "../components/icons/ArrowRightIcon";
 import { auth, db } from "../firebaseConfig";
 import styles from "./FormSignUp.module.css";
+import { useNavigate } from "react-router-dom";
 
 
 export default function FormSignUp() {
@@ -16,25 +17,31 @@ export default function FormSignUp() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
+  
   function handleRegistroSubmit() {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log(
           "Usuario registrado correctamente:",
           userCredential.user.uid,
-          window.location.href = "http://localhost:5173/"
         );
-
         const newUser = {
           name: name,
           LastName: LastName,
           username: username,
           email: email,
+          favorites:[]
         };
-        addDoc(collection(db, "users"), newUser)
+        addDoc(collection(db, 'users'), newUser)
+          .then((docRef) => {
+            const userDocRef = doc(db, 'users', docRef.id);
+            return setDoc(userDocRef, { uid: auth.currentUser.uid }, { merge: true });
+          })
           .then(() => {
             console.log("Datos de registro guardados en Firestore");
+            navigate("/")
           })
           .catch((error) => {
             console.error(
@@ -42,14 +49,18 @@ export default function FormSignUp() {
               error
             );
           });
+        
       })
       .catch((error) => {
+        alert(error.message);
         console.error("Error al registrar usuario:", error.message);
       });
   }
   function handleClick() {
-    window.location.href = "http://localhost:5173/sign-up-google";
-
+    navigate("/sign-up-google");
+  }
+  function handleLoginGo(){
+    navigate("/login");
   }
 
   return (
@@ -101,6 +112,10 @@ export default function FormSignUp() {
         <Button variant="text" onClick={handleClick}>
           Iniciar sesión con Google
           <ArrowRightIcon />
+        </Button>
+        <Button variant="text2" onClick={handleLoginGo}>
+            ¿Ya tienes una cuenta? Login
+            <ArrowRightIcon />
         </Button>
       </div>
     </div>
