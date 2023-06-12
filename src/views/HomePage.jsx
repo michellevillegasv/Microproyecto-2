@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { Await, useLoaderData } from "react-router-dom";
-import Button from "../components/Button";
 import Hero from "../components/Hero";
 import MovieCard from "../components/MovieCard";
 import Spinner from "../components/Spinner";
@@ -19,7 +18,6 @@ export default function HomePage() {
   return (
     <>
       <Hero images={carrousel} />
-      <Button to="/dashboard">Reservar</Button>
       <Suspense
         fallback={
           <div style={{ padding: "32px" }}>

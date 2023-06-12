@@ -13,6 +13,7 @@ import MoviePage from "./views/MoviePage";
 import Reservar from "./views/Reserva";
 import SignUpGoogle from "./views/SignUpGoogle";
 
+import profileLoader from "./loaders/profileLoader";
 import reservationLoader from "./loaders/reservationLoader";
 import SignUp from "./views/SignUpPage";
 
@@ -23,7 +24,11 @@ const router = createBrowserRouter(
       <Route path="/login" element={<Login />} />
       <Route path="/sign-up" element={<SignUp />} />
       <Route path="/sign-up-google" element={<SignUpGoogle />} />
-      <Route path="/dashboard" element={<ShowDashboard />} />
+      <Route
+        path="/dashboard"
+        element={<ShowDashboard />}
+        loader={profileLoader}
+      />
       <Route
         path="/peliculas/:movieId"
         element={<MoviePage />}

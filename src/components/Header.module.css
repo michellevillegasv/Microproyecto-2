@@ -6,3 +6,10 @@
   color: var(--primary-contrast);
   background-color: var(--primary-blue);
 }
+
+.actions {
+  display: flex;
+  gap: 2rem;
+  font-weight: bold;
+  font-size: 1.25rem;
+}

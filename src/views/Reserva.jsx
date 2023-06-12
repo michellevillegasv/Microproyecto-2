@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { Suspense, useMemo, useState } from "react";
 import { Await, Form, useLoaderData, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
@@ -65,8 +65,7 @@ function Reservar() {
         seats: seatIds,
         price: price,
       });
-      const movie = (await getDoc(movieRef))?.data();
-      const seats = movie.seats.map(({ id, status }) => ({
+      const seats = initialSeats.map(({ id, status }) => ({
         id,
         status: seatIds.includes(id) ? "unavailable" : status,
       }));
