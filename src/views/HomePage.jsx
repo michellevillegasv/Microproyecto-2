@@ -1,15 +1,13 @@
 import { Suspense } from "react";
 import { Await, useLoaderData } from "react-router-dom";
+import Button from "../components/Button";
 import Hero from "../components/Hero";
 import MovieCard from "../components/MovieCard";
 import Spinner from "../components/Spinner";
 import styles from "./HomePage.module.css";
-import Button from "../components/Button";
-import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
   const { movies } = useLoaderData();
-  const navigate=useNavigate();
   const carrousel = [
     "https://www.unimet.edu.ve/wp-content/uploads/2021/03/MODULO-DE-AULAS-ahora-1030x687.jpg",
     "https://www.unimet.edu.ve/wp-content/uploads/2020/10/Campus-galer%C3%ADa-52.jpg",
@@ -17,12 +15,11 @@ export default function HomePage() {
     "https://www.unimet.edu.ve/wp-content/uploads/2020/10/Campus-galer%C3%ADa-30.jpg",
     "https://www.unimet.edu.ve/wp-content/uploads/2020/10/Campus-galer%C3%ADa-50.jpg",
   ];
-  function handleReservar(){
-    navigate("/dashboard")
-  }
+
   return (
     <>
       <Hero images={carrousel} />
+      <Button to="/dashboard">Reservar</Button>
       <Suspense
         fallback={
           <div style={{ padding: "32px" }}>
@@ -30,7 +27,6 @@ export default function HomePage() {
           </div>
         }
       >
-      <Button onClick={handleReservar}>Reservar</Button>
         <Await resolve={movies}>
           {({ nowPlaying, upcoming }) => (
             <>
