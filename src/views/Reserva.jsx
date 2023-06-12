@@ -1,12 +1,22 @@
-import React from "react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ReservasFormulario from "../components/FormReserva";
+import { useAuth } from "./Auth";
 
-function Reservar(){
-    return (
+function Reservar() {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
+
+  return (
     <div>
-        <h1>Reservas</h1>
       <ReservasFormulario />
     </div>
-    );
+  );
 }
 export default Reservar;

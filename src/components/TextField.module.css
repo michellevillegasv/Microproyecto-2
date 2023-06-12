@@ -1,0 +1,20 @@
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.field > div {
+  padding: 0.5rem;
+}
+
+.field input {
+  display: flex;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 1px solid var(--primary-blue);
+  border-radius: 4px;
+}
+
+.field input::placeholder {
+  color: var(--placeholder-color);
+}

@@ -1,11 +1,16 @@
 import { useState } from "react";
 import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebaseConfig";
+import { useNavigate } from "react-router-dom";
+import styles from "./FormLogin.module.css";
+import Button from "../components/Button";
+import TextField from "../components/TextField";
+import ArrowRightIcon from "./icons/ArrowRightIcon";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
- 
+  const navigate = useNavigate();
 
   function handleEmailLogin(event) {
     event.preventDefault();
@@ -29,33 +34,38 @@ function Login() {
       .then((result) => {
         const user = result.user;
         console.log("Usuario inició sesión correctamente:", user.uid);
+        navigate(-1);
       })
       .catch((error) => {
+        alert(error.message);
         console.error("Error al iniciar sesión con cuenta de Google:", error.message);
       });
   }
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleEmailLogin}>
-        <label htmlFor="email">Correo electrónico:</label>
-        <input
-          type="email"
-          id="email"
+    <div className={styles.form}>
+      <div className={styles.icon}></div>
+      <h1>Login</h1>
+      <div className={styles.fields}>
+        <TextField
+          name="email"
+          label="Correo"
+          placeholder="Ingrese su correo"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
         />
-        <label htmlFor="password">Contraseña:</label>
-        <input
-          type="password"
-          id="password"
+        <TextField
+          name="password"
+          label="Contraseña"
+          placeholder="Ingrese su contraseña"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
-        <button type="submit">Iniciar sesión</button>
-      </form>
-      <button onClick={handleGoogleLogin}>Iniciar sesión con Google</button>
+        </div>
+        <div className={styles.actions}>
+          <Button onClick={handleEmailLogin}>Iniciar Sesión</Button>
+          <Button variant="text" onClick={handleGoogleLogin}>Iniciar Sesión con Google<ArrowRightIcon/></Button>
+        </div>
     </div>
   );
 }
