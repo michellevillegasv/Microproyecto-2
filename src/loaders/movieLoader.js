@@ -3,7 +3,6 @@ import { fetchMovie, getImageSource } from "../utils/movies";
 
 async function loadMovie(movieId) {
   const data = await fetchMovie(movieId);
-  console.log(data);
   return {
     banner: getImageSource(data.backdrop_path),
     poster: getImageSource(data.poster_path),
