@@ -17,7 +17,7 @@ export default function MoviePage() {
               <div className={styles.container}>
                 <img className={styles.poster} src={poster} alt={title} />
                 <div className={styles.actions}>
-                  <Button to="reserve">Reservar</Button>
+                  <Button to="reservar">Reservar</Button>
                   <Button variant="text">Agregar a favoritos</Button>
                 </div>
                 <div className={styles.content}>
