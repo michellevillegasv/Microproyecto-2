@@ -37,7 +37,7 @@ export default function FormSignUp() {
         addDoc(collection(db, 'users'), newUser)
           .then((docRef) => {
             const userDocRef = doc(db, 'users', docRef.id);
-            return setDoc(userDocRef, { uid: docRef.id }, { merge: true });
+            return setDoc(userDocRef, { uid: auth.currentUser.uid }, { merge: true });
           })
           .then(() => {
             console.log("Datos de registro guardados en Firestore");

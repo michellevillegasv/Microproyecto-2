@@ -35,7 +35,7 @@ import {
           addDoc(collection(db, "users"), userGoogle)
             .then((docRef) => {
               const userDocRef = doc(db, "users", docRef.id);
-              return setDoc(userDocRef, { uid: userGoogle.uid }, { merge: true });
+              return setDoc(userDocRef, { uid: auth.currentUser.uid }, { merge: true });
             })
             .then(() => {
               console.log("Datos de registro guardados en Firestore");
