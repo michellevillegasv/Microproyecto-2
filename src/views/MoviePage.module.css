@@ -56,6 +56,12 @@
   text-align: center;
 }
 
+.favoriteStatus {
+  margin: 1rem;
+  font-size: 1rem;
+  text-align: center;
+}
+
 @media screen and (max-width: 600px) {
   .container {
     display: flex;
