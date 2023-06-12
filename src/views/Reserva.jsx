@@ -1,10 +1,6 @@
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { Suspense, useMemo, useState } from "react";
-<<<<<<<<< Temporary merge branch 1
-import { Await, Form, useLoaderData } from "react-router-dom";
-=========
-import { Await, useLoaderData, useNavigate, useParams } from "react-router-dom";
->>>>>>>>> Temporary merge branch 2
+import { Await, Form, useLoaderData, useNavigate, useParams } from "react-router-dom";
 import Button from "../components/Button";
 import Seats from "../components/Seats";
 import Spinner from "../components/Spinner";
@@ -16,15 +12,12 @@ import styles from "./Reserva.module.css";
 function Reservar() {
   const { movie, seats: initialSeats } = useLoaderData();
   const { user } = useAuth();
-<<<<<<<<< Temporary merge branch 1
-=========
-  const navigate = useNavigate();
   const { movieId } = useParams();
+  const navigate=useNavigate();
 
   if (!user) {
     navigate("/login");
   }
->>>>>>>>> Temporary merge branch 2
 
   const [seats, setSeats] = useState(initialSeats);
   const [count, setCount] = useState(0);
