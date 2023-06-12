@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function ShowDashboard() {
   const user = auth.currentUser;
-  const [reservations, setReservations]=useState();
+  const [reservations, setReservations]=useState([]);
   const [favorites, setFavorites] = useState([]);
   const navigate=useNavigate();
   
@@ -37,13 +37,15 @@ export default function ShowDashboard() {
     async function getReservations(){
       if (user) {
         const snapshot = await getDocs(collection(db, "reservations"));
+        const userReservas = [];
         for (const docu of snapshot.docs) {
           if (docu.data().uid == user.uid) {
             const userReserva = docu.data().movieReference;
             const infoReserva = await fetchMovie(userReserva);
-            setReservations(infoReserva);
+            userReservas.push(infoReserva);
           }
         }
+        setReservations(userReservas);
       } else {
         alert("No hay usuario autenticado");
         navigate("/")
