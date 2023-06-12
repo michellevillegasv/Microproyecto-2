@@ -9,8 +9,6 @@ import { auth, db } from "../firebaseConfig";
 import { useAuth } from "./Auth";
 import styles from "./Reserva.module.css";
 
-
-
 function Reservar() {
   const { movie, seats: initialSeats } = useLoaderData();
   const { user } = useAuth();
@@ -47,9 +45,45 @@ function Reservar() {
     ]);
   };
 
+  const handleValidation = () => {
+    const name = document.getElementById("name").value;
+    const lastName = document.getElementById("last_name").value;
+    const dni = document.getElementById("dni").value;
+    const email = document.getElementById("email").value;
+    const errors = [];
+
+    if (!name) {
+      errors.push("El campo 'Nombre' es requerido.");
+    }
+
+    if (!lastName) {
+      errors.push("El campo 'Apellido' es requerido.");
+    }
+
+    if (!dni) {
+      errors.push("El campo 'Cédula' es requerido.");
+    } else if (dni.length < 7 || dni.length > 8) {
+      errors.push("El campo 'Cédula' debe tener entre 7 y 8 dígitos.");
+    }
+
+    if (!email) {
+      errors.push("El campo 'Correo Electrónico' es requerido.");
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      errors.push("El campo 'Correo Electrónico' no es válido.");
+    }
+
+    return errors;
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.target);
+
+    const errors = handleValidation();
+    if (errors.length > 0) {
+      alert(errors.join("\n"));
+      return;
+    }
 
     const reservationsRef = collection(db, "reservations");
     const moviesRef = collection(db, "movies");
@@ -59,7 +93,6 @@ function Reservar() {
 
     const userRef = doc(usersRef, user.uid);
     const movieRef = doc(moviesRef, data.get("movie"));
-    
 
     const seatIds = seats
       .filter((seat) => seat.status === "selected")
@@ -68,7 +101,7 @@ function Reservar() {
     try {
       await addDoc(reservationsRef, {
         uid: auth.currentUser.uid,
-        movieReference: movieId,
+        movieReference: movieId,    
         name: data.get("name"),
         lastName: data.get("last_name"),
         dni: data.get("dni"),
@@ -84,7 +117,7 @@ function Reservar() {
       await updateDoc(movieRef, { seats });
       alert("Reserva exitosa")
       navigate("/");
-    } catch (error) {
+    } catch(error) {
       console.error("Error al guardar la reserva:", error);
     }
   };
@@ -105,21 +138,25 @@ function Reservar() {
                 <h1>{title}</h1>
                 <div className={styles.fields}>
                   <TextField
+                    id="name"
                     name="name"
                     label="Nombre"
                     placeholder="Ingrese su nombre"
                   />
                   <TextField
+                    id="last_name"
                     name="last_name"
                     label="Apellido"
                     placeholder="Ingrese su apellido"
                   />
                   <TextField
+                    id="dni"
                     name="dni"
                     label="Cédula"
                     placeholder="Ingrese su cédula"
                   />
                   <TextField
+                    id="email"
                     name="email"
                     label="Correo Electrónico"
                     placeholder="Ingrese su correo"
@@ -145,7 +182,6 @@ function Reservar() {
       </Await>
     </Suspense>
   );
-
-  // ;
 }
+
 export default Reservar;
