@@ -1,6 +1,6 @@
 import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { Suspense, useMemo, useState } from "react";
-import { Await, useLoaderData, useNavigate } from "react-router-dom";
+import { Await, Form, useLoaderData, useNavigate, useParams } from "react-router-dom";
 import Button from "../components/Button";
 import Seats from "../components/Seats";
 import Spinner from "../components/Spinner";
@@ -12,6 +12,7 @@ import styles from "./Reserva.module.css";
 function Reservar() {
   const { movie, seats: initialSeats } = useLoaderData();
   const { user } = useAuth();
+  const {movieId}=useParams();
   const navigate = useNavigate();
 
   if (!user) {
@@ -44,44 +45,9 @@ function Reservar() {
     ]);
   };
 
-  const handleValidation = () => {
-    const name = document.getElementById("name").value;
-    const lastName = document.getElementById("last_name").value;
-    const dni = document.getElementById("dni").value;
-    const email = document.getElementById("email").value;
-    const errors = [];
-
-    if (!name) {
-      errors.push("El campo 'Nombre' es requerido.");
-    }
-
-    if (!lastName) {
-      errors.push("El campo 'Apellido' es requerido.");
-    }
-
-    if (!dni) {
-      errors.push("El campo 'Cédula' es requerido.");
-    } else if (dni.length < 7 || dni.length > 8) {
-      errors.push("El campo 'Cédula' debe tener entre 7 y 8 dígitos.");
-    }
-
-    if (!email) {
-      errors.push("El campo 'Correo Electrónico' es requerido.");
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      errors.push("El campo 'Correo Electrónico' no es válido.");
-    }
-
-    return errors;
-  };
 
   const handleSubmit = async (event) => {
     const data = new FormData(event.target);
-
-    const errors = handleValidation();
-    if (errors.length > 0) {
-      alert(errors.join("\n"));
-      return;
-    }
 
     const reservationsRef = collection(db, "reservations");
     const moviesRef = collection(db, "movies");
@@ -144,24 +110,29 @@ function Reservar() {
                     name="name"
                     label="Nombre"
                     placeholder="Ingrese su nombre"
+                    required
                   />
                   <TextField
                     id="last_name"
                     name="last_name"
                     label="Apellido"
                     placeholder="Ingrese su apellido"
+                    required
                   />
                   <TextField
                     id="dni"
                     name="dni"
                     label="Cédula"
                     placeholder="Ingrese su cédula"
+                    pattern="\d{7,8}"
+                    required
                   />
                   <TextField
                     id="email"
                     name="email"
                     label="Correo Electrónico"
                     placeholder="Ingrese su correo"
+                    required
                   />
                   <input name="movie" type="hidden" value={id} />
                 </div>

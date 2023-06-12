@@ -73,6 +73,7 @@ export default function FormSignUp() {
           label="Nombre"
           placeholder="Ingrese su nombre"
           value={name}
+          required
           onChange={(event) => setName(event.target.value)}
         />
         <TextField
@@ -80,6 +81,7 @@ export default function FormSignUp() {
           label="Apellido"
           placeholder="Ingrese su apellido"
           value={LastName}
+          required
           onChange={(event) => setLastName(event.target.value)}
         />
         <TextField
@@ -88,6 +90,7 @@ export default function FormSignUp() {
           placeholder="Ingrese su nombre de usuario"
           autoComplete="none"
           value={username}
+          required
           onChange={(event) => setUsername(event.target.value)}
         />
         <TextField
@@ -96,6 +99,7 @@ export default function FormSignUp() {
           label="Correo electrónico"
           placeholder="Ingrese su correo electrónico"
           value={email}
+          required
           onChange={(event) => setEmail(event.target.value)}
         />
         <TextField
@@ -104,6 +108,7 @@ export default function FormSignUp() {
           label="Contraseña"
           placeholder="Ingrese su contraseña"
           value={password}
+          required
           onChange={(event) => setPassword(event.target.value)}
         />
       </div>
