@@ -2,7 +2,7 @@ import {
     GoogleAuthProvider,
     signInWithPopup
   } from "firebase/auth";
-  import { addDoc, collection } from "firebase/firestore";
+  import { addDoc, collection, doc, setDoc } from "firebase/firestore";
   import { useState } from "react";
   import Button from "../components/Button";
   import TextField from "../components/TextField";
@@ -10,6 +10,7 @@ import {
   import { auth, db } from "../firebaseConfig";
   import styles from "./FormSignUp.module.css";
   import { useNavigate } from "react-router-dom";
+  
   
   export default function FormSignUp() {
     const [name, setName] = useState("");
@@ -29,8 +30,13 @@ import {
             LastName: LastName,
             username: username,
             email: user.email,
+            favorites: []
           };
           addDoc(collection(db, "users"), userGoogle)
+            .then((docRef) => {
+              const userDocRef = doc(db, "users", docRef.id);
+              return setDoc(userDocRef, { uid: userGoogle.uid }, { merge: true });
+            })
             .then(() => {
               console.log("Datos de registro guardados en Firestore");
               navigate("/");

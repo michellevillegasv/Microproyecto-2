@@ -1,7 +1,7 @@
 import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import Button from "../components/Button";
 import TextField from "../components/TextField";
@@ -19,6 +19,7 @@ export default function FormSignUp() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  
   function handleRegistroSubmit() {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -31,8 +32,13 @@ export default function FormSignUp() {
           LastName: LastName,
           username: username,
           email: email,
+          favorites:[]
         };
-        addDoc(collection(db, "users"), newUser)
+        addDoc(collection(db, 'users'), newUser)
+          .then((docRef) => {
+            const userDocRef = doc(db, 'users', docRef.id);
+            return setDoc(userDocRef, { uid: docRef.id }, { merge: true });
+          })
           .then(() => {
             console.log("Datos de registro guardados en Firestore");
             navigate("/")
@@ -43,6 +49,7 @@ export default function FormSignUp() {
               error
             );
           });
+        
       })
       .catch((error) => {
         alert(error.message);
