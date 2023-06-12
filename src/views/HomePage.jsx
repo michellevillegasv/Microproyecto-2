@@ -16,7 +16,7 @@ export default function HomePage() {
   ];
 
   return (
-    <div>
+    <>
       <Hero images={carrousel} />
       <Suspense
         fallback={
@@ -52,6 +52,6 @@ export default function HomePage() {
           )}
         </Await>
       </Suspense>
-    </div>
+    </>
   );
 }
