@@ -7,6 +7,7 @@ import styles from "./HomePage.module.css";
 
 export default function HomePage() {
   const { movies } = useLoaderData();
+
   const carrousel = [
     "https://www.unimet.edu.ve/wp-content/uploads/2021/03/MODULO-DE-AULAS-ahora-1030x687.jpg",
     "https://www.unimet.edu.ve/wp-content/uploads/2020/10/Campus-galer%C3%ADa-52.jpg",

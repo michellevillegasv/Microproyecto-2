@@ -1,5 +1,5 @@
-import { addDoc, collection } from "firebase/firestore";
-import { useState } from "react";
+import { addDoc, collection, doc, getDocs } from "firebase/firestore";
+import { useState, useEffect} from "react";
 import { db } from "../firebaseConfig";
 import { useAuth } from "../views/Auth";
 import Button from "./Button";
@@ -19,14 +19,53 @@ function ReservationForm() {
 
   //const [seat, setSeat]=useState(1);
   const { user } = useAuth();
+  const [userRef, setUserrRef]=useState("")
+
+  useEffect(() => {
+    async function getFavorites() {
+      if (user) {
+        const snapshot = await getDocs(collection(db, "users"));
+
+        for (const docu of snapshot.docs) {
+          if (docu.data().uid == user.uid) {
+            const userDocRef = doc(db, "users", docu.id);
+            setUserrRef(userDocRef);
+          }
+        }
+      } else {
+        alert("No hay usuario autenticado");
+      }
+    }
+
+    getFavorites();
+  });
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    if (!name || !lastname || !id || !email || !tickets) {
+      alert("Por favor complete todos los campos")
+      console.log("Por favor complete todos los campos");
+      return;
+    }
+  
+    const emailRegex = /\S+@\S+\.\S+/;
+    if (!emailRegex.test(email)) {
+      alert("Ingrese un correo válido")
+      console.log("Por favor ingrese un correo electrónico válido");
+      return;
+    }
+
+
+    if (tickets < 1 || tickets > 5) {
+      alert("Cantidad de boletos inválida")
+      console.log("Por favor ingrese una cantidad de boletos válida (entre 1 y 5)");
+      return;
+    }
+
+
     if (user) {
       const reservationsRef = collection(db, "reservations");
-
-      const userRef = collection(db, "users").doc(user.uid);
 
       addDoc(reservationsRef, {
         userRef,
@@ -90,9 +129,10 @@ function ReservationForm() {
           value={tickets}
           onChange={(event) => setTickets(event.target.value)}
         />
-        <div>Precio: ${finalPrice}</div>
+        <div>Precio: ${finalPrice} 
+        </div>
       </div>
-      <Button type="submit">Reservar</Button>
+      <Button type="submit" >Reservar</Button>
     </form>
   );
 }
