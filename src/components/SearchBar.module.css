@@ -1,0 +1,18 @@
+.field {
+  display: flex;
+  border: 1px solid var(--primary-blue);
+  border-radius: 4px;
+}
+
+.field input {
+  display: flex;
+  flex-grow: 1;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  outline: none;
+}
+
+.field input::placeholder {
+  color: var(--placeholder-color);
+}

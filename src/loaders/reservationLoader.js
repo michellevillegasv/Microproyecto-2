@@ -6,12 +6,14 @@ import { loadSeats } from "../utils/reservations";
 export default async function reservationLoader({ params }) {
   const { movieId } = params;
 
+  if (!auth.currentUser) {
+    return redirect("/login");
+  }
+
   const movie = await loadMovie(movieId);
   const seats = await loadSeats(movieId);
 
-  if (!auth.currentUser) {
-    return redirect("/login");
-  } else if (
+  if (
     movie.releaseDate > new Date() ||
     seats.filter((seat) => seat.status === "unavailable").length === 20
   ) {

@@ -13,7 +13,7 @@ import { auth, db } from "../firebaseConfig";
 import styles from "./MoviePage.module.css";
 
 export default function MoviePage() {
-  const { movie, seats } = useLoaderData();
+  const { movie, seats, isFavorite } = useLoaderData();
   const { movieId } = useParams();
   const user = auth.currentUser;
 
@@ -63,9 +63,22 @@ export default function MoviePage() {
                 ) : (
                   <Button to="reservar">Reservar</Button>
                 )}
-                <Button variant="text" onClick={addFavorites}>
-                  Agregar a favoritos
-                </Button>
+                {isFavorite ? (
+                  <div
+                    className={styles.status}
+                    style={{
+                      fontWeight: "normal",
+                      fontSize: "1.25rem",
+                      margin: "1rem",
+                    }}
+                  >
+                    Agregado a favoritos
+                  </div>
+                ) : (
+                  <Button variant="text" onClick={addFavorites}>
+                    Agregar a favoritos
+                  </Button>
+                )}
               </div>
               <div className={styles.content}>
                 <h1>{title}</h1>
