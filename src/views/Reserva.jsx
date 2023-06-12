@@ -1,18 +1,21 @@
 import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { Suspense, useMemo, useState } from "react";
-import { Await, useLoaderData, useNavigate } from "react-router-dom";
+import { Await, useLoaderData, useNavigate, useParams } from "react-router-dom";
 import Button from "../components/Button";
 import Seats from "../components/Seats";
 import Spinner from "../components/Spinner";
 import TextField from "../components/TextField";
-import { db } from "../firebaseConfig";
+import { auth, db } from "../firebaseConfig";
 import { useAuth } from "./Auth";
 import styles from "./Reserva.module.css";
+
+
 
 function Reservar() {
   const { movie, seats: initialSeats } = useLoaderData();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { movieId } = useParams();
 
   if (!user) {
     navigate("/login");
@@ -56,6 +59,7 @@ function Reservar() {
 
     const userRef = doc(usersRef, user.uid);
     const movieRef = doc(moviesRef, data.get("movie"));
+    
 
     const seatIds = seats
       .filter((seat) => seat.status === "selected")
@@ -63,7 +67,8 @@ function Reservar() {
 
     try {
       await addDoc(reservationsRef, {
-        userRef,
+        uid: auth.currentUser.uid,
+        movieReference: movieId,
         name: data.get("name"),
         lastName: data.get("last_name"),
         dni: data.get("dni"),
@@ -77,6 +82,8 @@ function Reservar() {
         status: seatIds.includes(id) ? "unavailable" : status,
       }));
       await updateDoc(movieRef, { seats });
+      alert("Reserva exitosa")
+      navigate("/");
     } catch (error) {
       console.error("Error al guardar la reserva:", error);
     }

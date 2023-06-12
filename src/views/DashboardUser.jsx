@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import { getDoc, getDocs, collection, doc } from 'firebase/firestore';
 import styles from './DashboardUser.module.css';
-import { fetchMovies } from '../utils/movies';
+import { fetchMovie, fetchMovies } from '../utils/movies';
 import { auth, db } from '../firebaseConfig';
 import { useNavigate } from "react-router-dom";
 
 
+
 export default function ShowDashboard() {
   const user = auth.currentUser;
+  const [reservations, setReservations]=useState();
   const [favorites, setFavorites] = useState([]);
   const navigate=useNavigate();
   
@@ -32,8 +34,24 @@ export default function ShowDashboard() {
         navigate("/")
       }
     }
+    async function getReservations(){
+      if (user) {
+        const snapshot = await getDocs(collection(db, "reservations"));
+        for (const docu of snapshot.docs) {
+          if (docu.data().uid == user.uid) {
+            const userReserva = docu.data().movieReference;
+            const infoReserva = await fetchMovie(userReserva);
+            setReservations(infoReserva);
+          }
+        }
+      } else {
+        alert("No hay usuario autenticado");
+        navigate("/")
+      }
+    }
 
     getFavorites();
+    getReservations();
   }, [user,navigate]);
 
   return (
@@ -52,7 +70,14 @@ export default function ShowDashboard() {
       ))}
     <div className={styles.line}></div>
     <h2>RESERVAS</h2>
-    </>
-
-  );
+      {reservations.map((movie) => (
+        <div key={movie.id} className={styles.container}>
+          <img className={styles.poster} src={movie.poster} alt={movie.title} />
+          <div className={styles.content}>
+            <h1>{movie.title}</h1>
+          </div>
+        </div>
+      ))}
+      </>
+  )
 }
