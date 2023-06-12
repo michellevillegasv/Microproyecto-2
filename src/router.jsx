@@ -9,6 +9,7 @@ import HomePage from "./views/HomePage";
 import Login from "./views/Login";
 import Reservar from "./views/Reserva";
 import SignUp from "./views/SignUpPage";
+import SignUpGoogle from "./views/SignUpGoogle";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -17,6 +18,7 @@ const router = createBrowserRouter(
       <Route path="/login" element={<Login />} />
       <Route path="/sign-up" element={<SignUp />} />
       <Route path="/peliculas/:movieId/reservar" element={<Reservar />} />
+      <Route path="/sign-up-google" element={<SignUpGoogle />} />
     </Route>
   )
 );

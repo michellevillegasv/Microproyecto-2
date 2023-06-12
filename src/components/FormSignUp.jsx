@@ -1,7 +1,5 @@
 import {
-  GoogleAuthProvider,
   createUserWithEmailAndPassword,
-  signInWithPopup,
 } from "firebase/auth";
 import { addDoc, collection } from "firebase/firestore";
 import { useState } from "react";
@@ -10,6 +8,7 @@ import TextField from "../components/TextField";
 import ArrowRightIcon from "../components/icons/ArrowRightIcon";
 import { auth, db } from "../firebaseConfig";
 import styles from "./FormSignUp.module.css";
+
 
 export default function FormSignUp() {
   const [name, setName] = useState("");
@@ -23,7 +22,8 @@ export default function FormSignUp() {
       .then((userCredential) => {
         console.log(
           "Usuario registrado correctamente:",
-          userCredential.user.uid
+          userCredential.user.uid,
+          window.location.href = "http://localhost:5173/"
         );
 
         const newUser = {
@@ -47,37 +47,9 @@ export default function FormSignUp() {
         console.error("Error al registrar usuario:", error.message);
       });
   }
+  function handleClick() {
+    window.location.href = "http://localhost:5173/sign-up-google";
 
-  function handleRegistroGoogle() {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const user = result.user;
-        console.log("Usuario inició sesión correctamente:", user.uid);
-
-        const userGoogle = {
-          name: name,
-          LastName: LastName,
-          username: username,
-          email: user.email,
-        };
-        addDoc(collection(db, "usuarios"), userGoogle)
-          .then(() => {
-            console.log("Datos de registro guardados en Firestore");
-          })
-          .catch((error) => {
-            console.error(
-              "Error al guardar datos de registro en Firestore:",
-              error
-            );
-          });
-      })
-      .catch((error) => {
-        console.error(
-          "Error al iniciar sesión con cuenta de Google:",
-          error.message
-        );
-      });
   }
 
   return (
@@ -126,7 +98,7 @@ export default function FormSignUp() {
       </div>
       <div className={styles.actions}>
         <Button onClick={handleRegistroSubmit}>Registrarse</Button>
-        <Button variant="text" onClick={handleRegistroGoogle}>
+        <Button variant="text" onClick={handleClick}>
           Iniciar sesión con Google
           <ArrowRightIcon />
         </Button>
