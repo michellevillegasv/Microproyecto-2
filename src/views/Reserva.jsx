@@ -1,6 +1,6 @@
 import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { Suspense, useMemo, useState } from "react";
-import { Await, useLoaderData, useNavigate, useParams } from "react-router-dom";
+import { Await, useLoaderData, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import Seats from "../components/Seats";
 import Spinner from "../components/Spinner";
@@ -13,7 +13,6 @@ function Reservar() {
   const { movie, seats: initialSeats } = useLoaderData();
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { movieId } = useParams();
 
   if (!user) {
     navigate("/login");
@@ -76,7 +75,6 @@ function Reservar() {
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
     const data = new FormData(event.target);
 
     const errors = handleValidation();
@@ -133,7 +131,11 @@ function Reservar() {
             {banner && (
               <img className={styles.banner} src={banner} alt={title} />
             )}
-            <form className={styles.container} onSubmit={handleSubmit}>
+            <Form
+              className={styles.container}
+              onSubmit={handleSubmit}
+              action="/"
+            >
               <div className={styles.content}>
                 <h1>{title}</h1>
                 <div className={styles.fields}>
@@ -176,7 +178,7 @@ function Reservar() {
               <div className={styles.actions}>
                 <Button type="submit">Reservar</Button>
               </div>
-            </form>
+            </Form>
           </>
         )}
       </Await>
