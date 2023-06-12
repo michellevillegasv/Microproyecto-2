@@ -117,7 +117,7 @@ function Reservar() {
               </div>
               <div className={styles.seats}>
                 <Seats seats={seats} onSelect={handleSelect} />
-                <div>
+                <div className={styles.receipt}>
                   <div className={styles.count}>
                     Cantidad de Asientos: {count}
                   </div>

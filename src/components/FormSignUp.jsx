@@ -1,15 +1,11 @@
-import {
-  createUserWithEmailAndPassword,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import TextField from "../components/TextField";
-import ArrowRightIcon from "../components/icons/ArrowRightIcon";
 import { auth, db } from "../firebaseConfig";
 import styles from "./FormSignUp.module.css";
-import { useNavigate } from "react-router-dom";
-
 
 export default function FormSignUp() {
   const [name, setName] = useState("");
@@ -19,29 +15,32 @@ export default function FormSignUp() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  
   function handleRegistroSubmit() {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log(
           "Usuario registrado correctamente:",
-          userCredential.user.uid,
+          userCredential.user.uid
         );
         const newUser = {
           name: name,
           LastName: LastName,
           username: username,
           email: email,
-          favorites:[]
+          favorites: [],
         };
-        addDoc(collection(db, 'users'), newUser)
+        addDoc(collection(db, "users"), newUser)
           .then((docRef) => {
-            const userDocRef = doc(db, 'users', docRef.id);
-            return setDoc(userDocRef, { uid: auth.currentUser.uid }, { merge: true });
+            const userDocRef = doc(db, "users", docRef.id);
+            return setDoc(
+              userDocRef,
+              { uid: auth.currentUser.uid },
+              { merge: true }
+            );
           })
           .then(() => {
             console.log("Datos de registro guardados en Firestore");
-            navigate("/")
+            navigate("/");
           })
           .catch((error) => {
             console.error(
@@ -49,18 +48,11 @@ export default function FormSignUp() {
               error
             );
           });
-        
       })
       .catch((error) => {
         alert(error.message);
         console.error("Error al registrar usuario:", error.message);
       });
-  }
-  function handleClick() {
-    navigate("/sign-up-google");
-  }
-  function handleLoginGo(){
-    navigate("/login");
   }
 
   return (
@@ -109,13 +101,11 @@ export default function FormSignUp() {
       </div>
       <div className={styles.actions}>
         <Button onClick={handleRegistroSubmit}>Registrarse</Button>
-        <Button variant="text" onClick={handleClick}>
+        <Button variant="text" to="/sign-up-google" replace>
           Iniciar sesión con Google
-          <ArrowRightIcon />
         </Button>
-        <Button variant="text2" onClick={handleLoginGo}>
-            ¿Ya tienes una cuenta? Login
-            <ArrowRightIcon />
+        <Button variant="text" to="/login" replace>
+          ¿Ya tienes una cuenta? Inicia sesión
         </Button>
       </div>
     </div>

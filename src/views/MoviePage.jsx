@@ -6,7 +6,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { Suspense } from "react";
-import { Await, useLoaderData, useParams } from "react-router-dom";
+import { Await, useLoaderData, useNavigate, useParams } from "react-router-dom";
 import Button from "../components/Button";
 import Spinner from "../components/Spinner";
 import { auth, db } from "../firebaseConfig";
@@ -16,6 +16,8 @@ export default function MoviePage() {
   const { movie, seats, isFavorite } = useLoaderData();
   const { movieId } = useParams();
   const user = auth.currentUser;
+
+  const navigate = useNavigate();
 
   async function addFavorites() {
     if (user) {
@@ -31,8 +33,7 @@ export default function MoviePage() {
         }
       });
     } else {
-      alert("No hay usuario");
-      console.error("Error al obtener usuario");
+      navigate("/login");
     }
   }
 

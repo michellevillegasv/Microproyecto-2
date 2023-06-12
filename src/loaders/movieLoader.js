@@ -20,6 +20,6 @@ export default async function movieLoader({ params }) {
   return defer({
     movie: loadMovie(movieId),
     seats: await loadSeats(movieId),
-    isFavorite: await loadIsFavorite(movieId, auth.currentUser.uid),
+    isFavorite: await loadIsFavorite(movieId, auth.currentUser?.uid),
   });
 }

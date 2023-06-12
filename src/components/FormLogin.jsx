@@ -1,11 +1,14 @@
+import {
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from "firebase/auth";
 import { useState } from "react";
-import { GoogleAuthProvider, signInWithPopup,  signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebaseConfig";
 import { useNavigate } from "react-router-dom";
-import styles from "./FormLogin.module.css";
 import Button from "../components/Button";
 import TextField from "../components/TextField";
-import ArrowRightIcon from "./icons/ArrowRightIcon";
+import { auth } from "../firebaseConfig";
+import styles from "./FormLogin.module.css";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -17,14 +20,16 @@ function Login() {
 
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-
         const user = userCredential.user;
         console.log("Usuario inició sesión correctamente:", user.uid);
-        navigate("/")
+        navigate("/");
       })
       .catch((error) => {
-        alert(error.message)
-        console.error("Error al iniciar sesión con correo electrónico y contraseña:", error.message);
+        alert(error.message);
+        console.error(
+          "Error al iniciar sesión con correo electrónico y contraseña:",
+          error.message
+        );
       });
   }
 
@@ -40,12 +45,11 @@ function Login() {
       })
       .catch((error) => {
         alert(error.message);
-        console.error("Error al iniciar sesión con cuenta de Google:", error.message);
+        console.error(
+          "Error al iniciar sesión con cuenta de Google:",
+          error.message
+        );
       });
-  }
-
-  function handleSignUpGo(){
-    navigate("/sign-up");
   }
 
   return (
@@ -67,17 +71,18 @@ function Login() {
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
-        </div>
-        <div className={styles.actions}>
-          <Button onClick={handleEmailLogin}>Iniciar Sesión</Button>
-          <Button variant="text" onClick={handleGoogleLogin}>Iniciar Sesión con Google<ArrowRightIcon/></Button>
-          <Button variant="text2" onClick={handleSignUpGo}>
-            ¿No tienes una cuenta? Regístrate
-            <ArrowRightIcon />
+      </div>
+      <div className={styles.actions}>
+        <Button onClick={handleEmailLogin}>Iniciar Sesión</Button>
+        <Button variant="text" onClick={handleGoogleLogin}>
+          Iniciar Sesión con Google
         </Button>
-        </div>
+        <Button variant="text" to="/sign-up" replace>
+          ¿No tienes una cuenta? Regístrate
+        </Button>
+      </div>
     </div>
   );
 }
 
-export default Login
+export default Login;
