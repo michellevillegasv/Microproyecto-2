@@ -41,6 +41,9 @@ button {
   text-align: start;
   background: none;
   border: none;
+}
+
+button:not(:disabled) {
   cursor: pointer;
 }
 

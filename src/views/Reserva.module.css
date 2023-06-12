@@ -7,15 +7,15 @@
 .container {
   display: grid;
   grid-template:
-    "poster content" auto
-    "poster actions" 1fr
+    "seats content" auto
+    "seats actions" 1fr
     / 1fr 1fr;
   gap: 1rem;
   padding: 2rem;
 }
 
-.poster {
-  grid-area: poster;
+.seats {
+  grid-area: seats;
   width: 100%;
   border-radius: 4px;
 }
@@ -48,7 +48,7 @@
     display: flex;
     flex-direction: column;
   }
-  .poster {
+  .seats {
     align-self: center;
     width: min(100%, 240px);
   }
