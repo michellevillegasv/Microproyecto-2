@@ -1,14 +1,29 @@
-.containerInfo{
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin: 2rem 2rem 2rem;
-    padding: 6rem 2rem 1rem;
+.movies {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
 }
 
-.containerInfo > h1 {
-    margin: 0;
-    padding: 0;
-    text-align: center;
+.movies > h2 {
+  margin: 1rem;
+  font-size: 2rem;
+}
+
+.movies > div {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+  justify-items: center;
+}
+
+@media (max-width: 600px) {
+  .movies > div {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .movies > div {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
 }

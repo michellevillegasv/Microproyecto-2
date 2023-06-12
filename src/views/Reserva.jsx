@@ -1,17 +1,23 @@
-import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { Suspense, useMemo, useState } from "react";
-import { Await, Form, useLoaderData } from "react-router-dom";
+import { Await, Form, useLoaderData, useNavigate, useParams } from "react-router-dom";
 import Button from "../components/Button";
 import Seats from "../components/Seats";
 import Spinner from "../components/Spinner";
 import TextField from "../components/TextField";
-import { db } from "../firebaseConfig";
+import { auth, db } from "../firebaseConfig";
 import { useAuth } from "./Auth";
 import styles from "./Reserva.module.css";
-
+ 
 function Reservar() {
   const { movie, seats: initialSeats } = useLoaderData();
   const { user } = useAuth();
+  const { movieId } = useParams();
+  const navigate=useNavigate();
+
+  if (!user) {
+    navigate("/login");
+  }
 
   const [seats, setSeats] = useState(initialSeats);
   const [count, setCount] = useState(0);
@@ -39,16 +45,15 @@ function Reservar() {
     ]);
   };
 
+
   const handleSubmit = async (event) => {
+    event.preventDefault();
+
     const data = new FormData(event.target);
 
     const reservationsRef = collection(db, "reservations");
     const moviesRef = collection(db, "movies");
-    const usersRef = collection(db, "movies");
 
-    console.log(user, data.get("movie"));
-
-    const userRef = doc(usersRef, user.uid);
     const movieRef = doc(moviesRef, data.get("movie"));
 
     const seatIds = seats
@@ -57,7 +62,8 @@ function Reservar() {
 
     try {
       await addDoc(reservationsRef, {
-        userRef,
+        uid: auth.currentUser.uid,
+        movieReference: movieId,
         name: data.get("name"),
         lastName: data.get("last_name"),
         dni: data.get("dni"),
@@ -65,13 +71,14 @@ function Reservar() {
         seats: seatIds,
         price: price,
       });
-      const movie = (await getDoc(movieRef))?.data();
-      const seats = movie.seats.map(({ id, status }) => ({
+      const seats = initialSeats.map(({ id, status }) => ({
         id,
         status: seatIds.includes(id) ? "unavailable" : status,
       }));
       await updateDoc(movieRef, { seats });
-    } catch (error) {
+      alert("Reserva hecha")
+      navigate("/");
+    } catch(error) {
       console.error("Error al guardar la reserva:", error);
     }
   };
@@ -87,33 +94,38 @@ function Reservar() {
             {banner && (
               <img className={styles.banner} src={banner} alt={title} />
             )}
-            <Form
-              className={styles.container}
-              onSubmit={handleSubmit}
-              action="/"
-            >
+            <Form className={styles.container} onSubmit={handleSubmit}>
               <div className={styles.content}>
                 <h1>{title}</h1>
                 <div className={styles.fields}>
                   <TextField
+                    id="name"
                     name="name"
                     label="Nombre"
                     placeholder="Ingrese su nombre"
+                    required
                   />
                   <TextField
+                    id="last_name"
                     name="last_name"
                     label="Apellido"
                     placeholder="Ingrese su apellido"
+                    required
                   />
                   <TextField
+                    id="dni"
                     name="dni"
                     label="Cédula"
                     placeholder="Ingrese su cédula"
+                    pattern="\d{7,8}"
+                    required
                   />
                   <TextField
+                    id="email"
                     name="email"
                     label="Correo Electrónico"
                     placeholder="Ingrese su correo"
+                    required
                   />
                   <input name="movie" type="hidden" value={id} />
                 </div>
@@ -136,7 +148,6 @@ function Reservar() {
       </Await>
     </Suspense>
   );
-
-  // ;
 }
+
 export default Reservar;
