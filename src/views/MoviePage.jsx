@@ -8,32 +8,31 @@ export default function MoviePage() {
   const { movie } = useLoaderData();
 
   return (
-    <>
-      <Suspense fallback={<Spinner />}>
-        <Await resolve={movie}>
-          {({ banner, poster, title, overview, genres, languages }) => (
-            <>
+    <Suspense fallback={<Spinner />}>
+      <Await resolve={movie}>
+        {({ banner, poster, title, overview, genres, languages }) => (
+          <>
+            {banner && (
               <img className={styles.banner} src={banner} alt={title} />
-              <div className={styles.container}>
-                <img className={styles.poster} src={poster} alt={title} />
-                <div className={styles.actions}>
-                  <Button to="reservar">Reservar</Button>
-                  <Button variant="text">Agregar a favoritos</Button>
-                </div>
-                <div className={styles.content}>
-                  <h1>{title}</h1>
-                  <p className={styles.overview}>{overview}</p>
-                  <div className={styles.details}>
-                    <div>Géneros: {genres.join(", ")}</div>
-                    <div>Idiomas: {languages.join(", ")}</div>
-                  </div>
+            )}
+            <div className={styles.container}>
+              <img className={styles.poster} src={poster} alt={title} />
+              <div className={styles.actions}>
+                <Button to="reservar">Reservar</Button>
+                <Button variant="text">Agregar a favoritos</Button>
+              </div>
+              <div className={styles.content}>
+                <h1>{title}</h1>
+                {overview && <p className={styles.overview}>{overview}</p>}
+                <div className={styles.details}>
+                  {genres && <div>Géneros: {genres.join(", ")}</div>}
+                  {languages && <div>Idiomas: {languages.join(", ")}</div>}
                 </div>
               </div>
-            </>
-          )}
-        </Await>
-      </Suspense>
-      <img className={styles.banner} />
-    </>
+            </div>
+          </>
+        )}
+      </Await>
+    </Suspense>
   );
 }

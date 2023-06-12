@@ -1,24 +1,37 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Suspense } from "react";
+import { Await, useLoaderData } from "react-router-dom";
 import ReservasFormulario from "../components/FormReserva";
-import { useAuth } from "./Auth";
-import Asientos from "../components/Seats";
+import Seats from "../components/Seats";
+import Spinner from "../components/Spinner";
+import styles from "./Reserva.module.css";
 
 function Reservar() {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
-  }, [user, navigate]);
+  const { movie, seats } = useLoaderData();
 
   return (
-    <div>
-      <ReservasFormulario />
-      <Asientos />
-    </div>
+    <Suspense fallback={<Spinner />}>
+      <Await
+        resolve={movie}
+        errorElement={<div>¡Error al cargar los datos!</div>}
+      >
+        {({ banner, title }) => (
+          <>
+            {banner && (
+              <img className={styles.banner} src={banner} alt={title} />
+            )}
+            <div className={styles.container}>
+              <div className={styles.seats}>
+                <Seats seats={seats} />
+              </div>
+              <div className={styles.content}>
+                <h1>{title}</h1>
+                <ReservasFormulario />
+              </div>
+            </div>
+          </>
+        )}
+      </Await>
+    </Suspense>
   );
 }
 export default Reservar;

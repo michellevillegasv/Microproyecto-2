@@ -39,7 +39,7 @@ export async function fetchMovieGenres() {
   }
 }
 
-export async function fetchMovieDetails(movieId) {
+export async function fetchMovie(movieId) {
   const res = await fetchApi(`https://api.themoviedb.org/3/movie/${movieId}`, {
     language: "es-VE",
     region: "VE",
@@ -50,6 +50,12 @@ export async function fetchMovieDetails(movieId) {
   }
 }
 
+export async function fetchMovies(movieIds) {
+  return await Promise.all(
+    movieIds.map(async (movieId) => await fetchMovie(movieId))
+  );
+}
+
 export function getImageSource(path) {
-  return `https://image.tmdb.org/t/p/original${path}`;
+  return path && `https://image.tmdb.org/t/p/original${path}`;
 }

@@ -4,8 +4,9 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import Layout from "./components/Layout";
-import movieListLoader from "./loaders/movieListLoader";
+import movieListLoader from "./loaders/homeLoader";
 import movieLoader from "./loaders/movieLoader";
+import reservationLoader from "./loaders/reservationLoader";
 import HomePage from "./views/HomePage";
 import Login from "./views/Login";
 import MoviePage from "./views/MoviePage";
@@ -25,7 +26,7 @@ const router = createBrowserRouter(
       <Route
         path="/peliculas/:movieId/reservar"
         element={<Reservar />}
-        loader={movieLoader}
+        loader={reservationLoader}
       />
       <Route path="/peliculas/:movieId/reservar" element={<Reservar />} />
       <Route path="/login" element={<Login />} />
