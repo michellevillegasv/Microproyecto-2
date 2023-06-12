@@ -8,6 +8,7 @@ import TextField from "../components/TextField";
 import ArrowRightIcon from "../components/icons/ArrowRightIcon";
 import { auth, db } from "../firebaseConfig";
 import styles from "./FormSignUp.module.css";
+import { useNavigate } from "react-router-dom";
 
 
 export default function FormSignUp() {
@@ -16,6 +17,7 @@ export default function FormSignUp() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   function handleRegistroSubmit() {
     createUserWithEmailAndPassword(auth, email, password)
@@ -23,9 +25,7 @@ export default function FormSignUp() {
         console.log(
           "Usuario registrado correctamente:",
           userCredential.user.uid,
-          window.location.href = "http://localhost:5173/"
         );
-
         const newUser = {
           name: name,
           LastName: LastName,
@@ -35,6 +35,7 @@ export default function FormSignUp() {
         addDoc(collection(db, "users"), newUser)
           .then(() => {
             console.log("Datos de registro guardados en Firestore");
+            navigate("/")
           })
           .catch((error) => {
             console.error(
@@ -44,12 +45,15 @@ export default function FormSignUp() {
           });
       })
       .catch((error) => {
+        alert(error.message);
         console.error("Error al registrar usuario:", error.message);
       });
   }
   function handleClick() {
-    window.location.href = "http://localhost:5173/sign-up-google";
-
+    navigate("/sign-up-google");
+  }
+  function handleLoginGo(){
+    navigate("/login");
   }
 
   return (
@@ -101,6 +105,10 @@ export default function FormSignUp() {
         <Button variant="text" onClick={handleClick}>
           Iniciar sesión con Google
           <ArrowRightIcon />
+        </Button>
+        <Button variant="text2" onClick={handleLoginGo}>
+            ¿Ya tienes una cuenta? Login
+            <ArrowRightIcon />
         </Button>
       </div>
     </div>

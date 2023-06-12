@@ -19,6 +19,7 @@ const router = createBrowserRouter(
       <Route path="/" element={<HomePage />} loader={movieListLoader} />
       <Route path="/login" element={<Login />} />
       <Route path="/sign-up" element={<SignUp />} />
+      <Route path="/sign-up-google" element={<SignUpGoogle />} />
       <Route path="/peliculas/:movieId">
         <Route
           path="/peliculas/:movieId"

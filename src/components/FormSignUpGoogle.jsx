@@ -9,11 +9,13 @@ import {
   import ArrowRightIcon from "../components/icons/ArrowRightIcon";
   import { auth, db } from "../firebaseConfig";
   import styles from "./FormSignUp.module.css";
+  import { useNavigate } from "react-router-dom";
   
   export default function FormSignUp() {
     const [name, setName] = useState("");
     const [LastName, setLastName] = useState("");
     const [username, setUsername] = useState("");
+    const navigate=useNavigate();
   
     function handleRegistroGoogle() {
       const provider = new GoogleAuthProvider();
@@ -31,7 +33,7 @@ import {
           addDoc(collection(db, "users"), userGoogle)
             .then(() => {
               console.log("Datos de registro guardados en Firestore");
-              window.location.href = "http://localhost:5173/";
+              navigate("/");
             })
             .catch((error) => {
               console.error(
@@ -41,6 +43,7 @@ import {
             });
         })
         .catch((error) => {
+          alert(error.message)
           console.error(
             "Error al iniciar sesión con cuenta de Google:",
             error.message
@@ -49,7 +52,7 @@ import {
     }
 
     function handleLoginGo(){
-      window.location.href = "http://localhost:5173/login";
+      navigate("/login");
     }
   
     return (
