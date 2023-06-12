@@ -13,7 +13,7 @@ import { auth, db } from "../firebaseConfig";
 import styles from "./MoviePage.module.css";
 
 export default function MoviePage() {
-  const { movie } = useLoaderData();
+  const { movie, seats } = useLoaderData();
   const { movieId } = useParams();
   const user = auth.currentUser;
 
@@ -39,7 +39,15 @@ export default function MoviePage() {
   return (
     <Suspense fallback={<Spinner />}>
       <Await resolve={movie}>
-        {({ banner, poster, title, overview, genres, languages }) => (
+        {({
+          banner,
+          poster,
+          title,
+          overview,
+          genres,
+          languages,
+          releaseDate,
+        }) => (
           <>
             {banner && (
               <img className={styles.banner} src={banner} alt={title} />
@@ -47,7 +55,14 @@ export default function MoviePage() {
             <div className={styles.container}>
               <img className={styles.poster} src={poster} alt={title} />
               <div className={styles.actions}>
-                <Button to="reservar">Reservar</Button>
+                {seats.filter((seat) => seat.status === "unavailable")
+                  .length === 20 ? (
+                  <div className={styles.status}>AGOTADO</div>
+                ) : releaseDate > new Date() ? (
+                  <div className={styles.status}>PRÓXIMAMENTE</div>
+                ) : (
+                  <Button to="reservar">Reservar</Button>
+                )}
                 <Button variant="text" onClick={addFavorites}>
                   Agregar a favoritos
                 </Button>
@@ -58,6 +73,9 @@ export default function MoviePage() {
                 <div className={styles.details}>
                   {genres && <div>Géneros: {genres.join(", ")}</div>}
                   {languages && <div>Idiomas: {languages.join(", ")}</div>}
+                  <div>
+                    Fecha de estreno: {releaseDate.toLocaleDateString()}
+                  </div>
                 </div>
               </div>
             </div>

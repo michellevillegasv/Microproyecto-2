@@ -29,16 +29,6 @@ export async function fetchUpcomingMovies() {
   }
 }
 
-export async function fetchMovieGenres() {
-  const res = await fetchApi("https://api.themoviedb.org/3/genre/movie/list", {
-    language: "es-VE",
-  });
-  if (res.ok) {
-    const data = await res.json();
-    return data;
-  }
-}
-
 export async function fetchMovie(movieId) {
   const res = await fetchApi(`https://api.themoviedb.org/3/movie/${movieId}`, {
     language: "es-VE",
@@ -58,4 +48,18 @@ export async function fetchMovies(movieIds) {
 
 export function getImageSource(path) {
   return path && `https://image.tmdb.org/t/p/original${path}`;
+}
+
+export async function loadMovie(movieId) {
+  const data = await fetchMovie(movieId);
+  return {
+    id: data.id,
+    banner: getImageSource(data.backdrop_path),
+    poster: getImageSource(data.poster_path),
+    title: data.title,
+    overview: data.overview,
+    genres: data.genres.map((genre) => genre.name),
+    languages: data.spoken_languages.map((language) => language.name),
+    releaseDate: new Date(data.release_date),
+  };
 }
