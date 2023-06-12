@@ -31,8 +31,8 @@ export default function MovieCard({
       <div className={styles.content}>
         <div className={styles.title}>{movie.title}</div>
         <div className={styles.details}>
-          <div>Género: {movie.genres.join(", ")}</div>
-          <div>Idiomas: {movie.languages.join(", ")}</div>
+          {movie.genres && <div>Género: {movie.genres.join(", ")}</div>}
+          {movie.langauges && <div>Idiomas: {movie.languages.join(", ")}</div>}
           <div>Fecha de estreno: {movie.releaseDate.toLocaleDateString()}</div>
         </div>
         <div className={styles.actions}>

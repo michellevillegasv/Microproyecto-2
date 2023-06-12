@@ -1,6 +1,6 @@
 import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { Suspense, useMemo, useState } from "react";
-import { Await, useLoaderData, useNavigate } from "react-router-dom";
+import { Await, Form, useLoaderData } from "react-router-dom";
 import Button from "../components/Button";
 import Seats from "../components/Seats";
 import Spinner from "../components/Spinner";
@@ -12,11 +12,6 @@ import styles from "./Reserva.module.css";
 function Reservar() {
   const { movie, seats: initialSeats } = useLoaderData();
   const { user } = useAuth();
-  const navigate = useNavigate();
-
-  if (!user) {
-    navigate("/login");
-  }
 
   const [seats, setSeats] = useState(initialSeats);
   const [count, setCount] = useState(0);
@@ -45,7 +40,6 @@ function Reservar() {
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
     const data = new FormData(event.target);
 
     const reservationsRef = collection(db, "reservations");
@@ -93,7 +87,11 @@ function Reservar() {
             {banner && (
               <img className={styles.banner} src={banner} alt={title} />
             )}
-            <form className={styles.container} onSubmit={handleSubmit}>
+            <Form
+              className={styles.container}
+              onSubmit={handleSubmit}
+              action="/"
+            >
               <div className={styles.content}>
                 <h1>{title}</h1>
                 <div className={styles.fields}>
@@ -132,7 +130,7 @@ function Reservar() {
               <div className={styles.actions}>
                 <Button type="submit">Reservar</Button>
               </div>
-            </form>
+            </Form>
           </>
         )}
       </Await>
