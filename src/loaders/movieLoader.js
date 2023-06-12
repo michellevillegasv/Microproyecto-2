@@ -1,9 +1,8 @@
 import { defer } from "react-router-dom";
-import { fetchMovieDetails, getImageSource } from "../utils/movies";
+import { fetchMovie, getImageSource } from "../utils/movies";
 
 async function loadMovie(movieId) {
-  const data = await fetchMovieDetails(movieId);
-  console.log(data);
+  const data = await fetchMovie(movieId);
   return {
     banner: getImageSource(data.backdrop_path),
     poster: getImageSource(data.poster_path),

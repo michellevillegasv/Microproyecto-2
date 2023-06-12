@@ -27,7 +27,7 @@ export default function MovieCard({
 }) {
   return (
     <div className={styles.card} tabIndex={0}>
-      <img src={movie.posterSrc} alt={movie.title} />
+      <img src={movie.poster} alt={movie.title} />
       <div className={styles.content}>
         <div className={styles.title}>{movie.title}</div>
         <div className={styles.details}>

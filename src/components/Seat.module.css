@@ -1,0 +1,15 @@
+.seat:is(:hover, :focus) {
+  color: var(--highlight-blue);
+}
+
+.available {
+  color: var(--placeholder-color);
+}
+
+.selected {
+  color: var(--primary-blue);
+}
+
+.unavailable {
+  color: #808080;
+}

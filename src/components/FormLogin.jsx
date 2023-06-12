@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup,  signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import styles from "./FormLogin.module.css";
@@ -20,8 +20,10 @@ function Login() {
 
         const user = userCredential.user;
         console.log("Usuario inició sesión correctamente:", user.uid);
+        navigate("/")
       })
       .catch((error) => {
+        alert(error.message)
         console.error("Error al iniciar sesión con correo electrónico y contraseña:", error.message);
       });
   }
@@ -34,12 +36,16 @@ function Login() {
       .then((result) => {
         const user = result.user;
         console.log("Usuario inició sesión correctamente:", user.uid);
-        navigate(-1);
+        navigate("/");
       })
       .catch((error) => {
         alert(error.message);
         console.error("Error al iniciar sesión con cuenta de Google:", error.message);
       });
+  }
+
+  function handleSignUpGo(){
+    navigate("/sign-up");
   }
 
   return (
@@ -65,6 +71,10 @@ function Login() {
         <div className={styles.actions}>
           <Button onClick={handleEmailLogin}>Iniciar Sesión</Button>
           <Button variant="text" onClick={handleGoogleLogin}>Iniciar Sesión con Google<ArrowRightIcon/></Button>
+          <Button variant="text2" onClick={handleSignUpGo}>
+            ¿No tienes una cuenta? Regístrate
+            <ArrowRightIcon />
+        </Button>
         </div>
     </div>
   );
