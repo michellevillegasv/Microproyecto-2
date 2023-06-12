@@ -44,11 +44,7 @@ function Reservar() {
 
     const reservationsRef = collection(db, "reservations");
     const moviesRef = collection(db, "movies");
-    const usersRef = collection(db, "movies");
 
-    console.log(user, data.get("movie"));
-
-    const userRef = doc(usersRef, user.uid);
     const movieRef = doc(moviesRef, data.get("movie"));
 
     const seatIds = seats
@@ -57,7 +53,8 @@ function Reservar() {
 
     try {
       await addDoc(reservationsRef, {
-        userRef,
+        uid: user.uid,
+        movieReference: movie.id,
         name: data.get("name"),
         lastName: data.get("last_name"),
         dni: data.get("dni"),
