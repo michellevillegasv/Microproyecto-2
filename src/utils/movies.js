@@ -7,6 +7,19 @@ function fetchApi(endpoint, params) {
   return fetch(url.href);
 }
 
+export async function fetchSearchMovies(query) {
+  if (!query) return null;
+  const res = await fetchApi("https://api.themoviedb.org/3/search/movie", {
+    query,
+    language: "es-VE",
+    region: "VE",
+  });
+  if (res.ok) {
+    const data = await res.json();
+    return data;
+  }
+}
+
 export async function fetchNowPlayingMovies() {
   const res = await fetchApi("https://api.themoviedb.org/3/movie/now_playing", {
     language: "es-VE",
