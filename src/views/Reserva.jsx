@@ -5,10 +5,10 @@ import Button from "../components/Button";
 import Seats from "../components/Seats";
 import Spinner from "../components/Spinner";
 import TextField from "../components/TextField";
-import { db } from "../firebaseConfig";
+import { auth, db } from "../firebaseConfig";
 import { useAuth } from "./Auth";
 import styles from "./Reserva.module.css";
-
+ 
 function Reservar() {
   const { movie, seats: initialSeats } = useLoaderData();
   const { user } = useAuth();
@@ -76,7 +76,7 @@ function Reservar() {
         status: seatIds.includes(id) ? "unavailable" : status,
       }));
       await updateDoc(movieRef, { seats });
-
+      alert("Reserva hecha")
       navigate("/");
     } catch(error) {
       console.error("Error al guardar la reserva:", error);
