@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import { useAuth } from "../views/Auth";
 import styles from "./Header.module.css";
 
 export default function Header() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <header className={styles.header}>
@@ -15,7 +16,14 @@ export default function Header() {
         {user ? (
           <>
             <Link to="/dashboard">Perfil</Link>
-            <Link onClick={logout}>Cerrar sesión</Link>
+            <Link
+              onClick={async () => {
+                await logout();
+                navigate("/");
+              }}
+            >
+              Cerrar sesión
+            </Link>
           </>
         ) : (
           <Link to="/login">Ingresar</Link>

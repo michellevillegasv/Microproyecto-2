@@ -5,17 +5,21 @@ import {
   getDocs,
   updateDoc,
 } from "firebase/firestore";
-import { Suspense } from "react";
-import { Await, useLoaderData, useParams } from "react-router-dom";
+import { Suspense, useState } from "react";
+import { Await, useLoaderData, useNavigate, useParams } from "react-router-dom";
 import Button from "../components/Button";
 import Spinner from "../components/Spinner";
 import { auth, db } from "../firebaseConfig";
 import styles from "./MoviePage.module.css";
 
 export default function MoviePage() {
-  const { movie, seats, isFavorite } = useLoaderData();
+  const { movie, seats, isFavorite: initialIsFavorite } = useLoaderData();
   const { movieId } = useParams();
   const user = auth.currentUser;
+
+  const [isFavorite, setIsFavorite] = useState(initialIsFavorite);
+
+  const navigate = useNavigate();
 
   async function addFavorites() {
     if (user) {
@@ -27,12 +31,11 @@ export default function MoviePage() {
             favorites: arrayUnion(movieId),
           });
           alert("Añadido a Favoritos");
-          console.log("Añadida");
+          setIsFavorite(true);
         }
       });
     } else {
-      alert("No hay usuario");
-      console.error("Error al obtener usuario");
+      navigate("/login");
     }
   }
 
@@ -64,14 +67,7 @@ export default function MoviePage() {
                   <Button to="reservar">Reservar</Button>
                 )}
                 {isFavorite ? (
-                  <div
-                    className={styles.status}
-                    style={{
-                      fontWeight: "normal",
-                      fontSize: "1.25rem",
-                      margin: "1rem",
-                    }}
-                  >
+                  <div className={styles.favoriteStatus}>
                     Agregado a favoritos
                   </div>
                 ) : (

@@ -41,6 +41,29 @@
   font-weight: bold;
   font-size: 2rem;
   text-align: center;
+  text-transform: uppercase;
+}
+
+.seats {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.receipt {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.count {
+  font-size: 1.25rem;
+}
+
+.total {
+  font-weight: bold;
+  font-size: 2rem;
 }
 
 @media screen and (max-width: 600px) {
@@ -49,7 +72,11 @@
     flex-direction: column;
   }
   .seats {
-    align-self: center;
-    width: min(100%, 240px);
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .seats > :first-child {
+    flex-grow: 1;
   }
 }

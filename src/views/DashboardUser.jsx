@@ -21,8 +21,8 @@ export default function ShowDashboard() {
           >
             <Await resolve={reservations}>
               {(reservations) =>
-                reservations?.map((movie) => (
-                  <MovieCard key={movie.id} movie={movie} />
+                reservations?.map((movie, key) => (
+                  <MovieCard key={key} movie={movie} />
                 ))
               }
             </Await>
@@ -41,8 +41,8 @@ export default function ShowDashboard() {
           >
             <Await resolve={favorites}>
               {(favorites) =>
-                favorites?.map((movie) => (
-                  <MovieCard key={movie.id} movie={movie} />
+                favorites?.map((movie, key) => (
+                  <MovieCard key={key} movie={movie} />
                 ))
               }
             </Await>
